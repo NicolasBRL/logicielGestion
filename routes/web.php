@@ -36,8 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [App\Http\Controllers\OperationController::class, 'index'])->name('dashboard');
 
-        Route::get("operations/filter", [App\Http\Controllers\OperationController::class, 'getOperationsWithFilters'])->name('operations.filter');
         Route::resource("operations", App\Http\Controllers\OperationController::class);
+        Route::post("/operations/download-pdf", [App\Http\Controllers\OperationController::class, 'downloadOperationsPDF'])->name('operations.pdf');
         Route::resource("categories", App\Http\Controllers\CategorieController::class);
         Route::resource("utilisateurs", App\Http\Controllers\UserController::class);
     });

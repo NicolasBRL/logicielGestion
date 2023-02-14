@@ -53,7 +53,7 @@
                             <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    
+
                     <input name="filterFirstDate" type="text" datepicker datepicker-format="dd/mm/yyyy" autocomplete="off" {{(isset($filtersList) && isset($filtersList['filterFirstDate'])) ? 'value='.$filtersList['filterFirstDate'] : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="Sélectionne la date">
                 </div>
                 <div class="flex items-center {{(isset($filtersList) && $filtersList['filtreDateType'] === 'between') ? '' : 'hidden'}}" id="secondDateInput">
@@ -71,7 +71,7 @@
         </div>
 
         <button type="submit" class="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">Filtrer</button>
-        
+
         @if(isset($filtersList))
         <div class="ml-auto">
             <a href="{{route('dashboard')}}" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-800 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">Supprimer les filtres</a>
@@ -109,70 +109,85 @@
         </thead>
         <tbody>
             @forelse ($operations as $operation)
-                @if ($operation->last)
-                <tr class="bg-gray-800">
-                    @else
-                <tr class="border-b bg-gray-800 border-gray-700">
+            @if ($operation->last)
+            <tr class="bg-gray-800">
+                @else
+            <tr class="border-b bg-gray-800 border-gray-700">
+                @endif
+                <th scope="row" class="px-6 py-4">
+                    {{ $operation->id }}
+                </th>
+                <td class="px-6 py-4">
+                    {{ Carbon\Carbon::parse($operation->date)->format('d/m/Y') }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $operation->nom }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ App\Models\Categorie::getNomCategorie($operation->categorieId)}}
+                </td>
+                <td class="px-6 py-4">
+                    @if (!$operation->estCredit)
+                    {{ $operation->montant}}
                     @endif
-                    <th scope="row" class="px-6 py-4">
-                        {{ $operation->id }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ Carbon\Carbon::parse($operation->date)->format('d/m/Y') }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $operation->nom }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ App\Models\Categorie::getNomCategorie($operation->categorieId)}}
-                    </td>
-                    <td class="px-6 py-4">
-                        @if (!$operation->estCredit)
-                        {{ $operation->montant}}
-                        @endif
-                    </td>
-                    <td class="px-6 py-4">
-                        @if ($operation->estCredit)
-                        {{ $operation->montant}}
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 text-right flex justify-end">
-                        <a href="{{ route('operations.edit', $operation) }}" class="font-medium text-blue-500 hover:underline open-edit-modal mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                            </svg>
-                        </a>
+                </td>
+                <td class="px-6 py-4">
+                    @if ($operation->estCredit)
+                    {{ $operation->montant}}
+                    @endif
+                </td>
+                <td class="px-6 py-4 text-right flex justify-end">
+                    <a href="{{ route('operations.edit', $operation) }}" class="font-medium text-blue-500 hover:underline open-edit-modal mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                        </svg>
+                    </a>
 
-                        <!-- Delete action -->
-                        <button type="submit" class="font-medium cursor-pointer open-modal" title="Supprimer l'opération" data-modal-id="delete-operation-modal" data-operation-id="{{ $operation->id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
-                        </button>
-
-
-                    </td>
-                <tr>
+                    <!-- Delete action -->
+                    <button type="submit" class="font-medium cursor-pointer open-modal" title="Supprimer l'opération" data-modal-id="delete-operation-modal" data-operation-id="{{ $operation->id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
             @empty
             <tr class="bg-gray-800">
                 <td colspan="7" class="text-center py-4">
-                Aucune opération trouvée..
+                    Aucune opération trouvée..
                 </td>
             </tr>
             @endforelse
         </tbody>
     </table>
     @if(isset($totalOpeFiltrer))
-        <div class="bg-gray-700 px-6 py-3 font-bold text-right {{ ($totalOpeFiltrer > 0) ? 'text-green-400' : 'text-red-400'}}">
-            Total: {{$totalOpeFiltrer}}€
-        </div>
+    <div class="bg-gray-700 px-6 py-3 font-bold text-right {{ ($totalOpeFiltrer > 0) ? 'text-green-400' : 'text-red-400'}}">
+        Total: {{$totalOpeFiltrer}}€
+    </div>
     @else
-        @php($totalBeneficit = App\Models\Operation::calculTotal())
-        <div class="bg-gray-700 px-6 py-3 font-bold text-right {{ ($totalBeneficit > 0) ? 'text-green-400' : 'text-red-400'}}">
-            Total: {{$totalBeneficit}}€
-        </div>
+    @php($totalBeneficit = App\Models\Operation::calculTotal())
+    <div class="bg-gray-700 px-6 py-3 font-bold text-right {{ ($totalBeneficit > 0) ? 'text-green-400' : 'text-red-400'}}">
+        Total: {{$totalBeneficit}}€
+    </div>
     @endif
 </div>
+
+<div class="my-6">
+    <form action="{{ route('operations.pdf', request()->all()) }}" method="post" target="__blank">
+        @csrf
+
+        @if(isset($totalOpeFiltrer))
+        <input type="hidden" name="filtreOperationsPDF">
+        @endif
+        <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Télécharger le bilan
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2 -mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+        </button>
+    </form>
+</div>
+
 
 <!-- Modal création opération -->
 <div class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="create-operation-modal">
@@ -275,7 +290,7 @@
                         @csrf
                         @method('DELETE')
                         <input id="deleteOperationId" name="id" hidden>
-                        <button type="submit" class="inline-flex w-full items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm title="Supprimer l'opération">
+                        <button type="submit" class="inline-flex w-full items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm title=" Supprimer l'opération">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text--white">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                             </svg>
@@ -300,7 +315,7 @@
         var modal = $(this).data('modal-id');
         $(`#${modal}`).css('display', 'block');
 
-        if(modal == 'delete-operation-modal') $('#deleteOperationId').val($(this).data('operation-id'));
+        if (modal == 'delete-operation-modal') $('#deleteOperationId').val($(this).data('operation-id'));
     })
 
     $('.close-modal').click(function() {
