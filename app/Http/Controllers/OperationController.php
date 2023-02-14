@@ -2,14 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FiltersOperationsRequest;
 use App\Http\Requests\StoreOperationRequest;
 use App\Models\Categorie;
 use App\Models\Operation;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OperationController extends Controller
 {
+
+    public function index(FiltersOperationsRequest $request)
+    {
+        if($request->has('filtreOperations')){
+            $operationsFiltered = Operation::query();
+
+            if($request->filled('categorieFiltre')){
+                $operationsFiltered->whereIn('categorieId', $request->categorieFiltre);
+            }
+
+            if($request->filled('filterFirstDate')){
+                $firstDate = Carbon::createFromFormat('d/m/Y',  $request->filterFirstDate)->format('Y-m-d H:i:s');
+                if ($request->filled('filterSecondDate')) $secondDate = Carbon::createFromFormat('d/m/Y',  $request->filterSecondDate)->format('Y-m-d H:i:s');
+
+                if($request->filtreDateType === 'before'){
+                    $operationsFiltered->whereDate('date', '<', $firstDate);
+                }else if($request->filtreDateType === 'between'){
+                    $operationsFiltered->whereBetween('date', [$firstDate, $secondDate]);
+                }else{
+                    $operationsFiltered->whereDate('date', '>=', $firstDate);
+                }
+            }
+
+            $filtersList = [
+                'categories' => $request->categorieFiltre,
+                'filtreDateType' => $request->filtreDateType,
+                'filterFirstDate' => $request->filterFirstDate,
+                'filterSecondDate' => $request->filterSecondDate,
+            ];
+
+
+            $operations = $operationsFiltered->get();
+            $totalOpeFiltrer = Operation::calculOperationsFiltrer($operations);
+            $categories = Categorie::all();
+            
+            return view('dashboard', compact('operations', 'categories', 'filtersList', 'totalOpeFiltrer'));
+        }else{
+            $operations = Operation::orderBy('created_at', 'DESC')->paginate(15);
+            $categories = Categorie::all();
+            return view('dashboard', compact('operations', 'categories'));
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -65,15 +110,16 @@ class OperationController extends Controller
         return redirect(route("dashboard"))->with('success', 'Opération modifiée !');
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Operation $operation)
+    public function destroy(Request $request)
     {
-        $operation->delete();
-        return redirect(route('categories.index'))->with('success', 'Opération supprimée !');
+        Operation::find($request->id)->delete();
+        return redirect(route('dashboard'))->with('success', 'Opération supprimée !');
     }
 }

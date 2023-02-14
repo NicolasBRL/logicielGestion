@@ -15,4 +15,18 @@ class Operation extends Model
     {
         return (Operation::where('estCredit', '1')->sum('montant')) - (Operation::where('estCredit', '0')->sum('montant'));
     }
+
+    public static function calculOperationsFiltrer($operationsQuery)
+    {
+        $sum = 0;
+        foreach($operationsQuery as $child) {
+            if($child['estCredit'] === 1){
+                $sum += $child['montant'];
+            }else{
+                $sum -= $child['montant'];
+            }
+        }
+
+        return $sum;
+    }
 }

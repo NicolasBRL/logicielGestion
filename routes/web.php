@@ -15,12 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $operations = Operation::orderBy('created_at', 'DESC')->paginate(15);
-    $categories = Categorie::all();
-    return view('dashboard', compact('operations', 'categories'));
-})->name('dashboard');
+Route::get('/', [App\Http\Controllers\OperationController::class, 'index'])->name('dashboard');
 
 
+Route::get("operations/filter", [App\Http\Controllers\OperationController::class, 'getOperationsWithFilters'])->name('operations.filter');
 Route::resource("operations", App\Http\Controllers\OperationController::class);
 Route::resource("categories", App\Http\Controllers\CategorieController::class);

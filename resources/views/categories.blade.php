@@ -33,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $categorie)
+            @forelse ($categories as $categorie)
             @if ($categorie->last)
             <tr class="bg-gray-800">
                 @else
@@ -53,14 +53,20 @@
                     </a>
 
                     <!-- Delete action -->
-                    <button type="submit" class="font-medium cursor-pointer open-modal" title="Supprimer l'opération" data-modal-id="delete-categorie-modal" data-categorie-id="{{ $categorie->id }}">
+                    <button type="submit" class="font-medium cursor-pointer open-modal" title="Supprimer la catégorie" data-modal-id="delete-categorie-modal" data-categorie-id="{{ $categorie->id }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                         </svg>
                     </button>
                 </td>
             <tr>
-                @endforeach
+            @empty
+            <tr class="bg-gray-800">
+                <td colspan="7" class="text-center py-4">
+                Aucune opération trouvée..
+                </td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
@@ -90,7 +96,7 @@
     </div>
 </div>
 
-<!-- Modal suppresion catégorie -->
+<!-- Modal suppression catégorie -->
 <div class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="delete-categorie-modal">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
@@ -117,7 +123,7 @@
                     <form action="{{ route('categories.destroy', 'id')}}" method="post">
                         @csrf
                         @method('DELETE')
-                        <input id="deleteOperationId" name="id" hidden>
+                        <input id="deleteCategorieId" name="id" hidden>
                         <button type="submit" class="inline-flex w-full items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm title="Supprimer l'opération">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text--white">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -143,7 +149,7 @@
         var modal = $(this).data('modal-id');
         $(`#${modal}`).css('display', 'block');
 
-        if(modal == 'delete-categorie-modal') $('#deleteOperationId').val($(this).data('categorie-id'));
+        if(modal == 'delete-categorie-modal') $('#deleteCategorieId').val($(this).data('categorie-id'));
     })
 
     $('.close-modal').click(function() {
