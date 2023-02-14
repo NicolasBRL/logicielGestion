@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('additionalHead')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
-@endsection
-
 @section('hero')
 <div class="flex flex-wrap items-center justify-between">
     <h1 class="text-3xl font-bold uppercase">Gestion des comptes</h1>
@@ -58,7 +54,7 @@
                         </svg>
                     </div>
                     
-                    <input name="filterFirstDate" type="text" datepicker datepicker-format="dd/mm/yyyy" {{(isset($filtersList) && isset($filtersList['filterFirstDate'])) ? 'value='.$filtersList['filterFirstDate'] : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="Sélectionne la date">
+                    <input name="filterFirstDate" type="text" datepicker datepicker-format="dd/mm/yyyy" autocomplete="off" {{(isset($filtersList) && isset($filtersList['filterFirstDate'])) ? 'value='.$filtersList['filterFirstDate'] : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="Sélectionne la date">
                 </div>
                 <div class="flex items-center {{(isset($filtersList) && $filtersList['filtreDateType'] === 'between') ? '' : 'hidden'}}" id="secondDateInput">
                     <span class="mx-4 text-gray-500">et</span>
@@ -68,7 +64,7 @@
                                 <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <input name="filterSecondDate" type="text" datepicker datepicker-format="dd/mm/yyyy" {{(isset($filtersList) && isset($filtersList['filterSecondDate'])) ? 'value='.$filtersList['filterSecondDate'] : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="Sélectionne la date">
+                        <input name="filterSecondDate" type="text" datepicker datepicker-format="dd/mm/yyyy" autocomplete="off" {{(isset($filtersList) && isset($filtersList['filterSecondDate'])) ? 'value='.$filtersList['filterSecondDate'] : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="Sélectionne la date">
                     </div>
                 </div>
             </div>
@@ -180,7 +176,7 @@
 
 <!-- Modal création opération -->
 <div class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="create-operation-modal">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 bg-gray-500 !bg-opacity-75 transition-opacity"></div>
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -253,7 +249,7 @@
 
 <!-- Modal suppression opération -->
 <div class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="delete-operation-modal">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 bg-gray-500 !bg-opacity-75 transition-opacity"></div>
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -266,7 +262,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <div class="mt-3 text-left sm:mt-0 sm:ml-4">
                             <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Supprimer l'opération</h3>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">Êtes-vous sûre de vouloir supprimer l'opération ? Celle-ci ne sera plus récupérable une fois supprimée.</p>
@@ -298,7 +294,6 @@
 
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
 
 <script>
     $('.open-modal').click(function() {

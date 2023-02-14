@@ -6,10 +6,11 @@
 
         <title>{{config('app.name')}}</title>
 
-        @yield('additionalHead')
-
         @vite(['resources/css/app.css', 'resources/css/app.scss'])
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{{asset('favicon-32x32.png')}}" sizes="32x32" />
@@ -31,6 +32,8 @@
         </main>
 
         @vite(['resources/js/app.js'])
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+        
         @yield('script')
     </body>
 </html>

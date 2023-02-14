@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('additionalHead')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
-@endsection
-
 @section('hero')
 <div class="flex flex-wrap items-center justify-between">
     <h1 class="text-3xl font-bold uppercase">{{ $operation->nom }}</h1>
