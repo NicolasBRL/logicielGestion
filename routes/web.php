@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\OperationController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\SiteInfoController::class, 'home'])->name('home');
 
 /**
  * Utilisateur non connecté
@@ -40,6 +40,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post("/operations/download-pdf", [App\Http\Controllers\OperationController::class, 'downloadOperationsPDF'])->name('operations.pdf');
         Route::resource("categories", App\Http\Controllers\CategorieController::class);
         Route::resource("utilisateurs", App\Http\Controllers\UserController::class);
+
+        Route::group(['prefix' => '/configuration'], function () {
+            Route::get('/page-builder', [App\Http\Controllers\SiteInfoController::class, 'pageBuilder'])->name('configuration.pageBuilder');
+            Route::post('/page-builder', [App\Http\Controllers\SiteInfoController::class, 'pageBuilderSave'])->name('configuration.pageBuilder.save');
+            Route::get('/', [App\Http\Controllers\SiteInfoController::class, 'index'])->name('configuration.index');
+            Route::post('/', [App\Http\Controllers\SiteInfoController::class, 'update'])->name('configuration.update');
+            Route::post('/upload_image', [App\Http\Controllers\SiteInfoController::class, 'uploadImages'])->name('configuration.uploadImages');
+        });
     });
 
     // Déconnexion

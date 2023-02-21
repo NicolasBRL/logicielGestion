@@ -1,0 +1,10 @@
+#home{
+    &.not-exist{
+        background-color: #475569;
+        
+        h1{
+            color: #fff;
+            font-size: 2rem;
+        }
+    }
+}

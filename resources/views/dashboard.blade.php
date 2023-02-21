@@ -3,7 +3,7 @@
 @section('hero')
 <div class="flex flex-wrap items-center justify-between">
     <h1 class="text-3xl font-bold uppercase">Gestion des comptes</h1>
-    <button type="button" data-modal-id="create-operation-modal" class="inline-flex items-center text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-800 hover:bg-blue-700 focus:ring-blue-700 border-blue-700 open-modal">
+    <button type="button" data-modal-id="create-operation-modal" class="inline-flex items-center text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 ml-auto bg-blue-800 hover:bg-blue-700 focus:ring-blue-700 border-blue-700 open-modal">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 -ml-1">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -17,10 +17,10 @@
     @csrf
     <input type="hidden" name="filtreOperations">
 
-    <div class="w-full flex items-center mb-6">
+    <div class="w-full flex items-center mb-6 flex-wrap md:flex-nowrap">
 
         Filtrer par :
-        <div class="ml-6">
+        <div class="mx-6">
             <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">Catégories <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg></button>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="ml-6 flex items-center">
+        <div class="flex items-center justify-center w-full my-4 flex-wrap gap-4 md:my-0 md:w-auto">
             <select id="filtreDateType" name="filtreDateType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit p-2.5">
                 <option value="before" {{(isset($filtersList) && $filtersList['filtreDateType'] === 'before') ? 'selected' : ''}}>Avant le</option>
                 <option value="between" {{(isset($filtersList) && $filtersList['filtreDateType'] === 'between') ? 'selected' : ''}}>Entre le</option>
@@ -195,7 +195,7 @@
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <form action="{{ route('operations.store') }}" method="POST" class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <form action="{{ route('operations.store') }}" method="POST" class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-lg">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="w-full">
@@ -268,7 +268,7 @@
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-lg">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -304,7 +304,6 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')
